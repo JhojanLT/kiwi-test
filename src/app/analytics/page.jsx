@@ -8,7 +8,10 @@ export default function page() {
     <>
     <SideBar/>
     <main className='bg-gray-bgGray ml-72 p-5'> 
-
+      <div className='py-8'>
+        <p className='text-[#707EAE] text-xs'>Pages / Dashboard</p> {/*Cambiar a miga de pan*/}
+      <h1 className='font-bold text-3xl text-primary-fonts'>Main Dashboard</h1>
+      </div>
     <StatsRow/>
 
     </main>

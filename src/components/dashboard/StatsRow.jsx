@@ -1,46 +1,45 @@
+import { AnalyticsIcon } from "../icons";
+import EarningsIcon from "../icons/EarningsIcon";
+import SpendsIcon from "../icons/SpendsIcon";
 import StatCard from "./StatCard";
 
 export default function StatsRow () {
   const stats = [
     {
-      icon: "/assets/images/analytics/stats.png",
+      icon:  <AnalyticsIcon/>,
+      title:"Earnings",
       value: "$350.4",
-      iconBg: "bg-primary-hue"
     },
     {
-      icon: "/assets/icons/spend.png",
+      icon: <SpendsIcon/>,
       title: "Spend this month",
       value: "$642.39",
-      iconBg: "bg-green-50"
     },
     {
       title: "Sales",
       value: "$574.34",
-      iconBg: "bg-purple-50",
-      extraconten:{percent:'%',label:'label'}
+      extraContent:{percent:'+23%',label:'since last month'}
     },
     {
-      icon: "/assets/icons/balance.png",
+      icon: "/assets/images/analytics/flag.png",
       title: "Your Balance",
       value: "$1,000",
-      iconBg: "bg-blue-50",
     },
      {
-      icon: "/assets/icons/balance.png",
-      title: "Your Balance",
+      icon: "/assets/images/analytics/Icon.png",
+      title: "New Tasks",
       value: "$1,000",
-      iconBg: "bg-blue-50"
+      iconSize: "min-w-[12px]"
     },
      {
-      icon: "/assets/icons/balance.png",
-      title: "Your Balance",
+      icon: <EarningsIcon/>,
+      title: "Total Projects",
       value: "$1,000",
-      iconBg: "bg-blue-50",
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2 lg:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-6 gap-2 lg:gap-4">
       {stats.map((stat, index) => (
         <StatCard key={index} {...stat} />
       ))}

@@ -16,7 +16,7 @@ module.exports = {
          primary: {
           light: '#162D3A',
           main: '#20ABAD',
-          dark: '#0F5C5D',
+          fonts: '#2B3674',
           hue: '#F4FEFE',
         },
          gray: {
