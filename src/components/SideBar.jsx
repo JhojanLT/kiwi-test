@@ -1,52 +1,112 @@
-import { LockIcon, UserIcon } from "lucide-react";
-import { AnalyticsIcon, CartIcon, DashboardIcon, HomeIcon } from "./icons";
-const Sidebar = () => {
-  return (
+"use client";
+import { useState } from "react";
+import {
+  AnalyticsIcon,
+  CartIcon,
+  DashboardIcon,
+  HomeIcon,
+  LockIcon,
+  UserIcon,
+} from "./icons";
+import SidebarButton from "./atoms/SideBarButton";
 
-    <aside className="w-72 bg-white h-screen flex flex-col px-4 py-6 fixed">
-      <div className="mb-8 px-2">
-        <h1 className="text-xl font-bold text-primary-fonts">HORIZON <span className="font-normal">FREE</span></h1>
+const Sidebar = () => {
+  const [activePath, setActivePath] = useState("/dashboard");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const sidebarItems = [
+    {
+      id: "dashboard",
+      icon: DashboardIcon,
+      label: "Dashboard",
+      href: "/dashboard",
+    },
+    {
+      id: "nft-marketplace",
+      icon: CartIcon,
+      label: "NFT Marketplace",
+      href: "/nft-marketplace",
+    },
+    { id: "tables", icon: AnalyticsIcon, label: "Tables", href: "/tables" },
+    { id: "kanban", icon: HomeIcon, label: "Kanban", href: "/kanban" },
+    { id: "profile", icon: UserIcon, label: "Profile", href: "/profile" },
+    { id: "signin", icon: LockIcon, label: "Sign In", href: "/signin" },
+  ];
+
+  const handleNavigation = (href) => {
+    setActivePath(href);
+    console.log(`Navigating to: ${href}`);
+  };
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <aside
+      className={`
+        h-[150vh] md:h-full fixed bg-white shadow-lg transition-all duration-300 ease-in-out z-50
+        ${isCollapsed ? "w-16" : "w-72"}
+        md:w-72 md:translate-x-0
+        ${isCollapsed ? "translate-x-0" : "translate-x-0"}
+        lg:w-72
+      `}
+    >
+      <div
+        className={`p-6 border-b border-gray-200 flex items-center justify-between`}
+      >
+        <div
+          className={`text-xl font-bold text-gray-800 transition-opacity duration-300 ${
+            isCollapsed ? "opacity-0 hidden" : "opacity-100"
+          }`}
+        >
+          HORIZON FREE
+        </div>
+
+        <button
+          onClick={toggleSidebar}
+          className="flex md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <svg
+            className={`w-5 h-5 transition-transform duration-300 ${
+              isCollapsed ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
       </div>
 
-{/* Falta crear la linea que separa el texto del menú */}
-{/* Hay que corregir hover de algunos Iconos */}
+      <div className="p-4">
+        <nav className="space-y-1">
+          {sidebarItems.map((item) => (
+            <SidebarButton
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              href={item.href}
+              isActive={activePath === item.href}
+              onClick={handleNavigation}
+              isCollapsed={isCollapsed}
+            />
+          ))}
+        </nav>
+      </div>
 
-      <nav className="flex flex-col space-y-4 text-sm text-gray-mainGray font-medium">
-        <div className="flex items-center space-x-3 hover:text-primary-fonts  cursor-pointer">
-          <HomeIcon />
-          <span >Dashboard</span>
-        </div>
-
-        <div className="flex items-center space-x-3 hover:text-primary-fonts cursor-pointer">
-            <CartIcon/>
-          
-          <span>NFT Marketplace</span>
-        </div>
-
-
-         <div className="flex items-center space-x-3 hover:text-primary-fonts cursor-pointer">
-          <AnalyticsIcon/>
-        <span>Tables</span>
-        </div>
-    
-
-        <div className="flex items-center space-x-3 hover:text-primary-fonts cursor-pointer">
-          <DashboardIcon />
-
-          <span>Kanban</span>
-        </div>
-
-        <div className="flex items-center space-x-3 hover:text-primary-fonts cursor-pointer">
-            <UserIcon/>
-
-          <span>Profile</span>
-        </div>
-
-        <div className="flex items-center space-x-3 hover:text-primary-fonts cursor-pointer">
-            <LockIcon/>
-          <span>Sign In</span>
-        </div>
-      </nav>
+      {!isCollapsed && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsCollapsed(true)}
+        />
+      )}
     </aside>
   );
 };
