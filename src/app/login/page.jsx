@@ -1,21 +1,41 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 export default function page() {
+  const router = useRouter();
 
-    const router = useRouter();
+  const validUsers = [
+    { email: "admin@company.com", password: "admin123456" },
+    { email: "user@test.com", password: "password123" },
+    { email: "jon@leno.com", password: "hola12345" },
+  ];
 
-    const handleRedirect = (text) => {
-    console.log(`Ingresaste con ${text}`)
-    router.push('/analytics');
+  const authenticateUser = async (email, password) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const user = validUsers.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (user) {
+      return { success: true, user: { email: user.email } };
+    } else {
+      throw new Error("Credenciales inválidas");
+    }
+  };
+
+  const handleRedirect = (text) => {
+    alert(`Ingresaste con ${text}`);
+    router.push("/analytics");
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm({
     mode: "onChange",
   });
@@ -23,10 +43,19 @@ export default function page() {
   const onSubmit = async (data) => {
     try {
       console.log("Datos del formulario:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert("¡Inicio de sesión exitoso!");
+
+      const response = await authenticateUser(data.email, data.password);
+
+      if (response.success) {
+        alert("¡Inicio de sesión exitoso!");
+        router.push("/analytics");
+      }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+      setError("root", {
+        type: "manual",
+        message: "Email o contraseña incorrectos",
+      });
     }
   };
 
@@ -37,7 +66,7 @@ export default function page() {
           <h1 className="text-4xl font-bold mb-2">
             Welcome Back <span>👋</span>
           </h1>
-          <p className="text-gray-600 text-xl CAMBIAR-FUENTE">
+          <p className="text-gray-600 CAMBIAR-FUENTE">
             Today is a new day. It's your day. You shape it.
             <br />
             Sign in to start managing your projects.
@@ -49,6 +78,12 @@ export default function page() {
           aria-label="Login form"
           onSubmit={handleSubmit(onSubmit)}
         >
+          {errors.root && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">{errors.root.message}</p>
+            </div>
+          )}
+
           <div>
             <label
               htmlFor="email"
@@ -116,8 +151,8 @@ export default function page() {
           <button
             type="submit"
             disabled={isSubmitting}
-             className="w-full py-2 bg-primary-color text-white rounded-lg font-medium bg-gray-800 hover:bg-gray-mainGray hover:text-primary-light transition"
->
+            className="w-full py-2 bg-primary-color text-white rounded-lg font-medium bg-gray-800 hover:bg-gray-mainGray hover:text-primary-light transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             {isSubmitting ? "Signing in..." : "Sign in"}
           </button>
 
@@ -127,24 +162,31 @@ export default function page() {
             <hr className="flex-grow border-gray-300" />
           </div>
 
-           <button
+          <button
             type="button"
             className="w-full py-2 border bg-[#F3F9FA] border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50"
-            onClick={()=>handleRedirect('Google')}
+            onClick={() => handleRedirect("Google")}
           >
-            <img src="assets/images/Google.png" alt="Google" className="w-5 h-5" />
+            <img
+              src="assets/images/Google.png"
+              alt="Google"
+              className="w-5 h-5"
+            />
             Sign in with Google
           </button>
 
           <button
             type="button"
             className="w-full py-2 border bg-[#F3F9FA] border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50"
-            onClick={()=>handleRedirect('Facebook')}
+            onClick={() => handleRedirect("Facebook")}
           >
-            <img src="assets/images/Facebook.png" alt="Facebook" className="w-5 h-5" />
+            <img
+              src="assets/images/Facebook.png"
+              alt="Facebook"
+              className="w-5 h-5"
+            />
             Sign in with Facebook
           </button>
-
         </form>
 
         <footer className="mt-8 text-center text-sm text-gray-600">

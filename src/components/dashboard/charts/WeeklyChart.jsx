@@ -54,7 +54,7 @@ const StackedBarChart = () => {
           <h4 className="text-xl font-semibold text-gray-900 mb-2">
             Weekly Revenue
           </h4>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap md:flex-nowrap">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-[#6366F1] rounded-sm"></div>
               <span className="text-sm text-gray-600">Product A</span>
